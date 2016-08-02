@@ -1,0 +1,51 @@
+*.user
+*.suo
+Guardfile
+Backup/*
+
+
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*/[Bb]in
+*/Umbraco
+*/Umbraco_Client
+*/[Dd]ebug*/
+*.lib
+*.sbr
+*/[Oo]bj/
+*/[Rr]elease*/
+*/[Pp]ackages*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+
+[Aa]pp/
+[Aa]pp/*
+
+#NuGet
+# Ignore NuGet Packages
+*.nupkg
+# Ignore the packages folder
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+
+*/[Aa]pp_[Dd]ata/
