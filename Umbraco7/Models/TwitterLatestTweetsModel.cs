@@ -15,6 +15,7 @@ namespace Umbraco7.Models
         public int MaxTweetCount { get; set; }
         public Dictionary<string, string[]> Tweets { get; set; }
         public string[] TwitterAccountNames { get; set; }
+        public string Error { get; set; }
 
     }
 }

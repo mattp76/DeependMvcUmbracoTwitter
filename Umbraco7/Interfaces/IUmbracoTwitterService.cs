@@ -8,8 +8,7 @@ namespace Umbraco7.Interfaces
 {
     public interface IUmbracoTwitterService
     {
-        void GetLatestTweets(TwitterLatestTweetsModel model);
-        Dictionary<string, string[]> GetLatestTweets(string[] accountNames, int tweetCount);
-        string[] GetLatestTweets(string accountName, int tweetCount);
+        Dictionary<string, string[]> GetLatestTweets(TwitterLatestTweetsModel model);
+        string[] GetLatestTweets(string accountName, int tweetCount, TwitterLatestTweetsModel model);
     }
 }

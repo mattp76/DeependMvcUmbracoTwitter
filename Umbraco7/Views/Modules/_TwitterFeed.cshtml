@@ -15,12 +15,23 @@
                     <ul>
                         @foreach (var tweetAccount in Model.Tweets)
                         {
+                            if (tweetAccount.Value != null) { 
 
-                            foreach (var tweet in tweetAccount.Value)
+                                foreach (var tweet in tweetAccount.Value)
+                                    {
+                                        <li>
+                                            <a href="http://www.twitter.com/@tweetAccount.Key">@tweet</a>
+                                        </li>
+                                    }
+                            }
+                            else
                             {
-                                <li class="tweetAccount.Key">
-                                    <a href="http://www.twitter.com/@tweetAccount.Key">@tweet</a>
+                                 <li>
+                                    No tweets have been returned
                                 </li>
+                                 if (!string.IsNullOrEmpty(Model.Error)) { 
+                                   <li class="error">@Model.Error</li>
+                                 }
                             }
                         }
                     </ul>

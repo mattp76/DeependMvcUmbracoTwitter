@@ -18,12 +18,35 @@ namespace Umbraco7.Controllers
   
         public ActionResult Index()
         {
-          
-            Model.TwitterAccountNames = new string[] { CurrentPage.GetPropertyValue<String>("twitterAccountNames")};
-            Model.MaxTweetCount = int.Parse(CurrentPage.GetPropertyValue<String>("twitterMaxItems"));
-            Model.ContentTitle = CurrentPage.GetPropertyValue<String>("contentTitle");
-            
-            var UmbracoTwitterService = new UmbracoTwitterService(Model, CurrentPage);
+
+            var root = getRootNode();
+
+            if (root.HasProperty("twitterAccountNames"))
+            {
+                if (root.HasValue("twitterAccountNames"))
+                {
+                    Model.TwitterAccountNames = new string[] { root.GetPropertyValue<String>("twitterAccountNames") };
+                }
+            }
+
+            if (root.HasProperty("twitterMaxItems"))
+            {
+                if (root.HasValue("twitterMaxItems"))
+                {
+                    Model.MaxTweetCount = int.Parse(root.GetPropertyValue<String>("twitterMaxItems"));
+                }
+            }
+
+            if (root.HasProperty("contentTitle"))
+            {
+                if (root.HasValue("contentTitle"))
+                {
+                    Model.ContentTitle = root.GetPropertyValue<String>("contentTitle");
+                }
+            }
+
+
+            var UmbracoTwitterService = new UmbracoTwitterService(Model, root);
 
             return View(Model);
         }

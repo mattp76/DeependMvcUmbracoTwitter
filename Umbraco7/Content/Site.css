@@ -23,9 +23,13 @@
 
 .box ul li {
     text-align: left;
-    line-height:23px;
+    line-height:21px;
     font-size:13px;
     margin-bottom:10px;
+}
+
+.box ul li.error {
+    color:red;
 }
 
 .box ul li a:hover {

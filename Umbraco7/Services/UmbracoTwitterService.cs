@@ -9,6 +9,7 @@ using umbraco.NodeFactory;
 using umbraco.MacroEngines;
 using System.Configuration;
 using Umbraco.Core.Models;
+using Umbraco.Web;
 
 namespace Umbraco7.Services
 {
@@ -23,28 +24,59 @@ namespace Umbraco7.Services
 
         private string CACHE_KEY_TWEETS = "TwitterLatestTweets.Tweets_{0}_{1}";
 
-        public UmbracoTwitterService(TwitterLatestTweetsModel model, IPublishedContent content)
+        public UmbracoTwitterService(TwitterLatestTweetsModel model, IPublishedContent root)
         {
 
-            var node = new DynamicNode(content.Id);
+            if (root.HasProperty("twitterConsumerKey"))
+            {
+                if (root.HasValue("twitterConsumerKey"))
+                {
+                    TWITTER_CONSUMER_KEY = root.GetPropertyValue<String>("twitterConsumerKey");
+                }
+            }
 
-            TWITTER_CONSUMER_KEY = node.GetPropertyValue("twitterConsumerKey");
-            TWITTER_CONSUMER_SECRET = node.GetPropertyValue("twitterConsumerSecret");
-            TWITTER_ACCESS_TOKEN = node.GetPropertyValue("twitterAccessToken");
-            TWITTER_ACCESS_SECRET = node.GetPropertyValue("twitterAccessSecret");
-            CACHE_DURATION_MINUTES = Convert.ToDouble(node.GetPropertyValue("twitterCacheDuration"));
 
-            GetLatestTweets(model);
+            if (root.HasProperty("twitterConsumerSecret"))
+            {
+                if (root.HasValue("twitterConsumerSecret"))
+                {
+                    TWITTER_CONSUMER_SECRET = root.GetPropertyValue<String>("twitterConsumerSecret");
+                }
+            }
+
+            if (root.HasProperty("twitterAccessToken"))
+            {
+                if (root.HasValue("twitterAccessToken"))
+                {
+                    TWITTER_ACCESS_TOKEN = root.GetPropertyValue<String>("twitterAccessToken");
+                }
+            }
+
+            if (root.HasProperty("twitterAccessSecret"))
+            {
+                if (root.HasValue("twitterAccessSecret"))
+                {
+                    TWITTER_ACCESS_SECRET = root.GetPropertyValue<String>("twitterAccessSecret");
+                }
+            }
+
+            if (root.HasProperty("twitterCacheDuration"))
+            {
+                if (root.HasValue("twitterCacheDuration"))
+                {
+                    double number;
+                    string value;
+                    value = root.GetPropertyValue<String>("twitterCacheDuration");
+
+                    if (Double.TryParse(value, out number))
+                        CACHE_DURATION_MINUTES = number; 
+                }
+            }
+
+
+            model.Tweets = GetLatestTweets(model);
         }
 
-
-        /// <summary>
-        /// Gets the latest tweets.
-        /// </summary>
-        public void GetLatestTweets(TwitterLatestTweetsModel model)
-        {
-             model.Tweets = GetLatestTweets(model.TwitterAccountNames, model.MaxTweetCount);
-        }
 
         /// <summary>
         /// Gets the latest tweets.
@@ -54,15 +86,15 @@ namespace Umbraco7.Services
         /// <returns>
         ///     The collection of different user tweets
         /// </returns>
-        public Dictionary<string, string[]> GetLatestTweets(string[] accountNames, int tweetCount)
+        public Dictionary<string, string[]> GetLatestTweets(TwitterLatestTweetsModel model)
         {
             var collection = new Dictionary<string, string[]>();
 
-            if (accountNames == null || accountNames.Length == 0) return collection;
+            if (model.TwitterAccountNames == null || model.TwitterAccountNames.Length == 0) return collection;
 
-            foreach (var accountName in accountNames)
+            foreach (var accountName in model.TwitterAccountNames)
             {
-                var tweets = GetLatestTweets(accountName, tweetCount);
+                var tweets = GetLatestTweets(accountName, model.MaxTweetCount, model);
 
                 if (!collection.ContainsKey(accountName))
                 {
@@ -83,7 +115,7 @@ namespace Umbraco7.Services
 
 
 
-        public string[] GetLatestTweets(string accountName, int tweetCount)
+        public string[] GetLatestTweets(string accountName, int tweetCount, TwitterLatestTweetsModel model)
         {
 
             var cacheKey = String.Format(CACHE_KEY_TWEETS, accountName, tweetCount);
@@ -104,7 +136,6 @@ namespace Umbraco7.Services
 
                     if (response != null)
                     {
-
                         var taggedTweets = response.Statuses.Select(item => item.Text).ToArray();
 
                         if (taggedTweets != null && taggedTweets.Count() > 0)
@@ -118,13 +149,11 @@ namespace Umbraco7.Services
                 }
                 catch (Exception e)
                 {
-
+                    model.Error = e.Message;
                 }
             }
             else
             {
-
-                var test = "hello";
                 return (string[])cachedTweets;
             }
 
