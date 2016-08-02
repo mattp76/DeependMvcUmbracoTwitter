@@ -15,4 +15,6 @@ again.
 
 I did a tiny bit of front end, just to tidy up the feed. Bootstrap was used to help with this.
 
+Proxy! ... please also note I added a proxy server to the web config. This will need to be changed, and (or) add a your local under the bypass list.
+
 
