@@ -24,8 +24,6 @@ Thumbs.db
 *.ilk
 *.log
 */[Bb]in
-*/Umbraco
-*/Umbraco_Client
 */[Dd]ebug*/
 *.lib
 *.sbr
@@ -48,4 +46,3 @@ _ReSharper*/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
 
-*/[Aa]pp_[Dd]ata/
